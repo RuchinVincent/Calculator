@@ -1,118 +1,122 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 namespace Calculator
 {
-    public partial class Form1 : Form
+    public partial class Calculator : Form
     {
-        Double Result_Value = 0;
-        String Operator_Performed = " ";
-        bool PerformedOp = false;
+        #region Private Variables
 
+        private Double Result_Value = 0;
+        private String Operator_Performed = " ";
+        private bool PerformedOp = false;
 
-        public Form1()
+        #endregion Private Variables
+
+        public Calculator()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
+        #region Form Events
 
+        private void Calculator_Resize(object sender, EventArgs e)
+        {
+            // Prevent the form from being resized
+            this.CancelResize();
         }
 
-        private void button15_Click(object sender, EventArgs e)
+        private void btnNumber_Click(object sender, EventArgs e)
         {
-            // numbers button and point
-            if (textBox_Result.Text == "0" || PerformedOp)
-                textBox_Result.Clear();
+            if (txtDisplay.Text == "0" || PerformedOp)
+                txtDisplay.Clear();
 
             PerformedOp = false;
             Button button = (Button)sender;
-            if(button.Text == ".")
+            if (button.Text == ".")
             {
-                if(!textBox_Result.Text.Contains("."))
-                    textBox_Result.Text += button.Text;
+                if (!txtDisplay.Text.Contains("."))
+                    txtDisplay.Text += button.Text;
             }
 
             else
-            textBox_Result.Text += button.Text;
+                txtDisplay.Text += button.Text;
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Operator_click_Event(object sender, EventArgs e)
+        private void btnOperation_Click(object sender, EventArgs e)
         {
             // +, -, *, / operators
             Button button = (Button)sender;
 
             if (Result_Value != 0)
             {
-                button16.PerformClick();
+                btnEqual.PerformClick();
                 Operator_Performed = button.Text;
-                label_Show_Op.Text = Result_Value + " " + Operator_Performed;
+                txtDisplay.Text = Result_Value + " " + Operator_Performed;
                 PerformedOp = true;
             }
             else
             {
 
                 Operator_Performed = button.Text;
-                Result_Value = Double.Parse(textBox_Result.Text);
-                label_Show_Op.Text = Result_Value + " " + Operator_Performed;
+                Result_Value = Double.Parse(txtDisplay.Text);
+                txtDisplay.Text = Result_Value + " " + Operator_Performed;
                 PerformedOp = true;
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            //CLEAR ENTRY BUTTON
-            textBox_Result.Text = "0";
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            //CLEAR BUTTON
-            textBox_Result.Text = "0";
-            Result_Value = 0;
-            label_Show_Op.Text = " ";
-        }
-
-        private void button16_Click(object sender, EventArgs e)
+        private void btnEqual_Click(object sender, EventArgs e)
         {
             // EQUALS BUTTON
             switch (Operator_Performed)
             {
                 case "+":
-                    textBox_Result.Text = (Result_Value + Double.Parse(textBox_Result.Text)).ToString();
+                    txtDisplay.Text = (Result_Value + Double.Parse(txtDisplay.Text)).ToString();
                     break;
 
                 case "-":
-                    textBox_Result.Text = (Result_Value - Double.Parse(textBox_Result.Text)).ToString();
+                    txtDisplay.Text = (Result_Value - Double.Parse(txtDisplay.Text)).ToString();
                     break;
 
                 case "*":
-                    textBox_Result.Text = (Result_Value * Double.Parse(textBox_Result.Text)).ToString();
+                    txtDisplay.Text = (Result_Value * Double.Parse(txtDisplay.Text)).ToString();
                     break;
 
                 case "/":
-                    textBox_Result.Text = (Result_Value / Double.Parse(textBox_Result.Text)).ToString();
+                    txtDisplay.Text = (Result_Value / Double.Parse(txtDisplay.Text)).ToString();
                     break;
 
                 default:
                     break;
 
             }
-            Result_Value = Double.Parse(textBox_Result.Text);
-            label_Show_Op.Text = " ";
+            Result_Value = Double.Parse(txtDisplay.Text);
+            txtDisplay.Text = Result_Value.ToString();
         }
+
+        private void btnCE_Click(object sender, EventArgs e)
+        {
+            //CLEAR ENTRY BUTTON
+            txtDisplay.Text = "0";
+        }
+
+        private void btnC_Click(object sender, EventArgs e)
+        {
+            //CLEAR BUTTON
+            txtDisplay.Text = "0";
+            Result_Value = 0;
+            txtDisplay.Text = " ";
+        }
+
+        #endregion Form Events
+
+        #region Private Methods
+
+        private void CancelResize()
+        {
+            // Set the Cancel property of the Resize event arguments to true
+            this.SuspendLayout();
+            this.ClientSize = new System.Drawing.Size(300, 200); // Set your preferred size
+            this.ResumeLayout();
+        }
+
+        #endregion Private Methods
     }
 }
